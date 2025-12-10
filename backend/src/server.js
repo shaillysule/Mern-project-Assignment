@@ -9,7 +9,15 @@ dotenv.config();
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://mern-project-assignment.vercel.app',
+    'https://mern-project-assignment-git-main-shaillysules-projects.vercel.app',
+    'https://mern-project-assignment-e2der8koc-shaillysules-projects.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -18,6 +26,21 @@ const projectRoutes = require('./routes/projectRoutes');
 const clientRoutes = require('./routes/clientRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
+
+// --- Base route ---
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'MERN Backend API',
+    status: 'running',
+    endpoints: {
+      health: '/api/health',
+      projects: '/api/projects',
+      clients: '/api/clients',
+      contacts: '/api/contacts',
+      newsletter: '/api/newsletter'
+    }
+  });
+});
 
 // --- Health check ---
 app.get('/api/health', (req, res) => {
